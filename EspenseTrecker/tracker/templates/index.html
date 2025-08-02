@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,22 +18,39 @@
         />
         <div class="balance-container">
           <h2>Your Balance</h2>
-          <h2 id="balance" class="balance">$0.00</h2>
+          <h2 id="balance" class="balance">$ {{current_balance.current_balance}}</h2>
         </div>
       </div>
       <div class="inc-exp-container">
         <div>
           <h4>Income</h4>
-          <p id="money-plus" class="money plus">+$0.00</p>
+          <p id="money-plus" class="money plus">+${{income}} </p>
         </div>
         <div>
           <h4>Expenses</h4>
-          <p id="money-minus" class="money minus">-$0.00</p>
+          <p id="money-minus" class="money minus">-${{expense}} </p>
         </div>
       </div>
       <h3>History</h3>
-      <ul id="list" class="list"></ul>
+
+
+      <ul id="list" class="list">
+
+        {%for transaction in transactions%}
+        <li class="{% if transaction.expense_type == 'DEBIT' %}minus {% else %}plus {% endif %}" >
+          {{transaction.descp}} <span>{{transaction.amount}}</span>
+          <a class="delete-btn" href="{% url 'delete_transaction' transaction.id %}">
+            <img src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png" alt="Delete" class="delete-icon">
+          </a>
+          
+        </li>
+        {% endfor %}
+      </ul>
+
+
+
       <h3>Add new transaction</h3>
+      
       <form method="POST" id="form">
         {% csrf_token %}
         <div class="form-control">
@@ -40,8 +58,7 @@
           <input type="text" name="description" id="text" placeholder="Enter description..." />
         </div>
         <div class="form-control">
-          <label for="amount"
-            >Amount <br />
+          <label for="amount">Amount <br />
             <small>(-100 = expense, 100 = income)</small></label
           >
           <input type="number" name="amount" id="amount" placeholder="Enter amount..." />

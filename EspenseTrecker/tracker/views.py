@@ -11,6 +11,10 @@ def index(request):
         expense_type = "CREDIT"
         if float(amount) < 0:
             expense_type = "DEBIT"
+
+        # if float(amount) == 0:
+        #     messages.success(request,"Amount cannot be zero")
+        #     return redirect('/')
         
         tracking_history = TrackingHistory.objects.create(amount=amount,
                                                        expense_type=expense_type,
@@ -22,5 +26,37 @@ def index(request):
 
         print(description,amount)
         return redirect('/')
+    
+    current_balance,_ = CurrentBalance.objects.get_or_create(id=1)
+    income = 0
+    expense = 0
 
-    return render(request, 'index.html')
+    for tracking_history in TrackingHistory.objects.all():
+        if tracking_history.expense_type == "CREDIT":
+            income+= tracking_history.amount
+        else:
+            expense+= tracking_history.amount
+
+    context ={
+        'income' : income,
+        'expense' : expense,
+        'transactions' : TrackingHistory.objects.all(),
+        'current_balance' : current_balance
+    }
+
+    return render(request, 'index.html',context)
+
+
+def delete_transaction(request, id):
+    tracking_history = TrackingHistory.objects.filter(id = id)
+
+    if tracking_history.exists():
+        curr_bal,_ = CurrentBalance.objects.get_or_create(id=1)
+        tracking_hist = tracking_history[0]
+
+        curr_bal.current_balance = curr_bal.current_balance - tracking_hist.amount
+
+        curr_bal.save()
+
+    tracking_history.delete()
+    return redirect('/')
