@@ -17,7 +17,7 @@ def make_credit(modeladmin, request, queryset):
             obj.save()
     queryset.update(expense_type="CREDIT")
 
-admin.site.disable_action("delete_selected")
+# admin.site.disable_action("delete_selected")
 
 @admin.action(description="Make it in Debit")
 def make_debit(modeladmin, request, queryset):
