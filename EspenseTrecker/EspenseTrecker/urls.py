@@ -21,6 +21,7 @@ from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
+    # path('jet/', include('jet.urls', 'jet')), 
     path('',include('tracker.urls')),
     path('admin/', admin.site.urls),
 ]
