@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class CurrentBalance(models.Model):
     current_balance = models.FloatField(default=0)

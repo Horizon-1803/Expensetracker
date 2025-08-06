@@ -1,15 +1,14 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="media/css/main.css">
-</head>
-<body>
-
+{% extends "base1.html" %}
+{% block start %}
     <h1>Expense Tracker</h1>
+    <form action="{% url 'logout_view' %}" method="post">
+        {% csrf_token %}
+        <button style="background-color: red; width: 200px;" class="btn" type="submit">Logout</button>
+    </form>
+    {{reques.user.username}}
+    {{reques.user.first_name}}
+    {{reques.user.last_name}}
+    
     <div class="container">
       <div class="header">
         <img
@@ -71,8 +70,4 @@
       <p>Please add a description and amount</p>
     </div>
 
-</body>
-<script>
-    var data = "{{ user_input|escapejs }}";
-</script>
-</html>
+{% endblock start %}
